@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Memory Game</title>
+<style>
+html, body {
+	margin: 0;
+	background-color: #202429;
+	font-family: 'Comic Sans MS', Tahoma, Geneva, sans-serif;
+	max-width: 1300px;
+	margin: 0 auto;
+}
+.articles div.article, .aboutme, .explore {
+	margin: 2em 1.2em;
+	border: 1px solid #FFFFFF;
+	border-radius: 7px;
+	font-family: Calibri;
+	font-size: 18px;
+}
+div.articles h2 {
+	color: #C05151;
+	font-size: 36px;
+	margin-left: 0.8em;
+}
+div.articles h3 {
+	color: #CCFF99;
+	font-size: 26px;
+	margin-left: 1.1em;
+}
+div.articles p {
+	margin: 0.5em 0.5em 0.5em 1.7em;
+	color: #FFFFFF;
+}
+div.articles a {
+	color: #006699;
+	text-decoration: none;
+}
+.articles .article .card-holder {
+	margin-left: 8em;
+	width: 40%;
+}
+.articles .article .card {
+	position: relative;
+	display: inline-block;
+	background: #C05151;
+	width: 40px;
+	height: 50px;
+	border: 1px solid #000000;
+	border-radius: 6px;
+	cursor: pointer;
+}
+.articles .article .card img {
+	position: relative;
+	top: 25%;
+	left: 20%;
+	vertical-align: middle;
+	display: none;
+}
+.articles .article .card img.visible {
+	position: relative;
+	top: 25%;
+	left: 20%;
+	vertical-align: middle;
+	display: block;
+}
+.articles .article .rotate {
+	background: #ffffff;
+}
+.articles .article .score-board {
+	margin-top: 1em;
+	margin-left: 8em;
+	margin-bottom: 1em;
+	width: 450px;
+	min-height: 50px;
+	border: 1px solid #66BE91;
+}
+
+/*Memory Game events*/
+div.startup {
+	margin-left: 8.2em;
+	margin-bottom: 1em;
+}
+#start-button, #reset-button {
+	background: #195199;
+	border: 1px solid #195199;
+	border-radius: 5px;
+	color: #ffffff;
+	box-shadow: -2px -2px 5px #191199 inset;
+	margin-left: 3em;
+}
+#start-button:hover, #reset-button:hover {
+	box-shadow: 5px 5px 5px #191199;
+}
+.prevent {
+	position: absolute;
+	width: 280px;
+	height: 340px;
+	background: #202429;
+	z-index: 10;
+	border-radius: 6px;
+}
+</style>
+<script src="jquery-1.11.3.min.js"></script>
+</head>
+<body>
+<div class="articles">
+<div class="article">
+		<h2>A Memory Game Using JavaScript</h2>
+		<p>This memory game is going to activate some areas of your brain responsible for memory acquisition which therefore can help your memory improve. Enjoy it and try to finish with less clicks as you can.</p>
+		<h3>How to Play</h3>
+		<p>Well, even though many of you know this, just few words, on the board are some cards face down. On each move you can turn cards one by one. If the images are identical, they are removed from the board. The aim is to find all pairs of identical cards with the least number of flips and also within less time.</p>
+		<div class="startup">
+		<button type="button" id="start-button" onclick="timeUpdateFunc();">Start</button>
+		<button type="button" id="reset-button" onclick="resetFunc();">Reset</button>
+		</div>
+		<div class="card-holder">
+			<div class="prevent"></div>
+			<div class="row-one">
+				<div id="r1c1" class="card"></div>
+				<div id="r1c2" class="card"></div>
+				<div id="r1c3" class="card"></div>
+				<div id="r1c4" class="card"></div>
+				<div id="r1c5" class="card"></div>
+				<div id="r1c6" class="card"></div>
+			</div>
+			<div class="row-two rows">
+				<div id="r2c1" class="card"></div>
+				<div id="r2c2" class="card"></div>
+				<div id="r2c3" class="card"></div>
+				<div id="r2c4" class="card"></div>
+				<div id="r2c5" class="card"></div>
+				<div id="r2c6" class="card"></div>
+			</div>
+			<div class="row-three rows">
+				<div id="r3c1" class="card"></div>
+				<div id="r3c2" class="card"></div>
+				<div id="r3c3" class="card"></div>
+				<div id="r3c4" class="card"></div>
+				<div id="r3c5" class="card"></div>
+				<div id="r3c6" class="card"></div>
+			</div>
+			<div class="row-four rows">
+				<div id="r4c1" class="card"></div>
+				<div id="r4c2" class="card"></div>
+				<div id="r4c3" class="card"></div>
+				<div id="r4c4" class="card"></div>
+				<div id="r4c5" class="card"></div>
+				<div id="r4c6" class="card"></div>
+			</div>
+			<div class="row-five rows">
+				<div id="r5c1" class="card"></div>
+				<div id="r5c2" class="card"></div>
+				<div id="r5c3" class="card"></div>
+				<div id="r5c4" class="card"></div>
+				<div id="r5c5" class="card"></div>
+				<div id="r5c6" class="card"></div>
+			</div>
+			<div class="row-six rows">
+				<div id="r6c1" class="card"></div>
+				<div id="r6c2" class="card"></div>
+				<div id="r6c3" class="card"></div>
+				<div id="r6c4" class="card"></div>
+				<div id="r6c5" class="card"></div>
+				<div id="r6c6" class="card"></div>
+			</div>
+		</div>
+
+		<div class="score-board">
+			<p>Total Clicks: <span id="clickCount">0</span></p>
+			<p id ="timer"></p>
+			<p id="score"></p>
+		</div>
+
+	</div>
+</div>
+</body>
+<script>
+var prevClickSrc, thisClickSrc, thisClickId, prevClickId, clickCount = 0, clicks = 0, scoreCount = 0, time = 0, t;
+$(document).ready(function(){
+		var arrayOfImages = ["anchor-outline.png", "battery-full.png", "battery-mid.png", "chart-bar.png", "device-desktop.png", "flash-outline.png", "location-arrow.png", "media-eject.png", "notes.png", "pen.png", "scissors-outline.png", "social-facebook.png", "social-skype-outline.png", "social-skype.png", "th-small.png", "wi-fi.png", "lightbulb.png", "star-outline.png"];
+		var idArray = ["r1c1", "r1c2", "r1c3", "r1c4", "r1c5", "r1c6", "r2c1", "r2c2", "r2c3", "r2c4", "r2c5", "r2c6", "r3c1", "r3c2", "r3c3", "r3c4", "r3c5", "r3c6", "r4c1", "r4c2", "r4c3", "r4c4", "r4c5", "r4c6", "r5c1", "r5c2", "r5c3", "r5c4", "r5c5", "r5c6", "r6c1", "r6c2", "r6c3", "r6c4", "r6c5", "r6c6"];
+		var click = 0;
+		for(var i = 0; i < 18; i++) {
+			var id1 = idArray[Math.floor(Math.random() * idArray.length)];
+			var remove1 = idArray.indexOf(id1)
+			idArray.splice(remove1, 1);
+			var img1 = new Image();
+			img1.src = 'images/' + arrayOfImages[i];
+			var assign1 = document.getElementById(id1);
+			assign1.appendChild(img1);
+			var id2 = idArray[Math.floor(Math.random() * idArray.length)];
+			var remove2 = idArray.indexOf(id2)
+			idArray.splice(remove2, 1);
+			var img2 = new Image();
+			img2.src = 'images/' + arrayOfImages[i];
+			var assign2 = document.getElementById(id2);
+			assign2.appendChild(img2);
+		}
+		
+		
+
+		$('.card').on('dblclick', function(e){
+			e.preventDefault();
+    		e.stopPropagation();
+			return false;
+		}).on('click', function(e){
+			clickCount++;
+			$('#clickCount').html(clickCount);
+			$('img').each(function(){
+					$(this).removeClass('visible').parent().removeClass('rotate');
+				});
+			$(this).toggleClass('rotate').find('img').toggleClass('visible');
+			thisClickSrc = $(this).find('img').attr('src');
+			thisClickId = $(this).attr('id')
+			if(thisClickSrc === prevClickSrc && thisClickId !== prevClickId) {
+				$(this).animate({opacity: 0}, 500);
+				$('img[src="'+ thisClickSrc + '"]').parent().animate({opacity: 0}, 500);
+				scoreCount += 2;
+			} else prevClickSrc = thisClickSrc, prevClickId = thisClickId, thisClickId="", thisClickSrc = '';
+			if(scoreCount >= 36) {
+				clearInterval(t);
+				var tUpdate = 'Total time ' + time + 's.';
+				$('#timer').html(tUpdate);
+				var avgTime = Math.floor(time / 18);
+				var para = 'You took approximately ' + avgTime + ' clicks to find a pair!';
+				$('#score').html(para);
+			}
+		});
+	});
+
+function timeUpdateFunc(){
+	$('.prevent').hide(1000);
+	t = setInterval(function(){
+		time = time + 1;
+	}, 1000);
+	$('#start-button').attr('disabled',true);
+	var count = $('#clickCount').html();
+	if(count >= 1000){
+		alert('Hey! What happened?\nAre you sleeping or what?\n\nHmm, I assume you are bored. Let\'s try something else');
+		location.reload();	
+	}
+}
+function resetFunc() {
+	location.reload();
+}
+</script>
+</html>
